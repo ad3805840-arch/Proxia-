@@ -1,0 +1,38 @@
+name: Build Proxia APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v4
+
+      - name: Installer Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurer Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: current
+
+      - name: Générer un keystore de debug
+        run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Construire l'APK
+        working-directory: app
+        run: gradle assembleDebug --stacktrace
+
+      - name: Récupérer l'APK généré
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxia-apk
+          path: app/build/outputs/apk/debug/*.apk
