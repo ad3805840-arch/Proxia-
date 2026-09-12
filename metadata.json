@@ -1,0 +1,6 @@
+{
+  "name": "Proxiya Live Scanner",
+  "description": "Application d'analyse IA en direct par caméra pour l'analyse visuelle de jeux, paris et trading.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
